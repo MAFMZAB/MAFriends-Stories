@@ -1,4 +1,4 @@
-const SHINO_ENA. = () => {
+const SHINO_ENA = () => {
 
   return (
     <>
@@ -23,5 +23,5 @@ const SHINO_ENA. = () => {
 window.friendStories =
   window.friendStories || {};
 
-window.friendStories.shino_ena. =
-  SHINO_ENA.;
+window.friendStories["shino_ena."] =
+  SHINO_ENA;
