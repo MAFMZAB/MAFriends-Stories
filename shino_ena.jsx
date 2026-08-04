@@ -23,5 +23,5 @@ const SHINO_ENA = () => {
 window.friendStories =
   window.friendStories || {};
 
-window.friendStories.mafmzab =
+window.friendStories.shino_ena =
   SHINO_ENA;
