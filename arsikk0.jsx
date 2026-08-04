@@ -23,5 +23,5 @@ const ARSIKK0 = () => {
 window.friendStories =
   window.friendStories || {};
 
-window.friendStories.arsikk =
+window.friendStories.arsikk0 =
   ARSIKK0;
