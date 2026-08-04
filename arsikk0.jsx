@@ -24,4 +24,4 @@ window.friendStories =
   window.friendStories || {};
 
 window.friendStories.mafmzab =
-  MAFMZAB;
+  ARSIKK0;
