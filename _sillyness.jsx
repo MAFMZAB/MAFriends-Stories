@@ -23,5 +23,5 @@ const _SILLYNESS = () => {
 window.friendStories =
   window.friendStories || {};
 
-window.friendStories.mafmzab =
+window.friendStories._sillyness =
   _SILLYNESS;
