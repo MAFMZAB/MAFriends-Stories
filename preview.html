@@ -152,22 +152,74 @@
 
     async function loadStory(name) {
 
-      const file =
-        storyFiles[name];
+  const file = storyFiles[name];
 
-      const response =
-        await fetch(
-          file + "?v=" + Date.now()
-        );
+  const response = await fetch(
+    file + "?v=" + Date.now()
+  );
 
-      if (!response.ok) {
+  if (!response.ok) {
+    throw new Error(
+      `HTTP ${response.status} while loading ${file}`
+    );
+  }
 
-        throw new Error(
-          `HTTP ${response.status} while loading ${file}`
-        );
+  const source = await response.text();
 
-      }
+  /*
+    Convert JSX → normal JavaScript.
+  */
 
+  const transformed = Babel.transform(
+    source,
+    {
+      presets: ["react"]
+    }
+  ).code;
+
+
+  /*
+    Execute the transformed JavaScript
+    directly.
+
+    React and window are supplied explicitly.
+  */
+
+  const executeStory = new Function(
+    "React",
+    "window",
+    transformed
+  );
+
+  executeStory(
+    React,
+    window
+  );
+
+
+  /*
+    The story file should have registered
+    itself here.
+  */
+
+  const Story =
+    window.friendStories[name];
+
+  if (typeof Story !== "function") {
+
+    console.log(
+      "Story registration debug:",
+      name,
+      window.friendStories
+    );
+
+    throw new Error(
+      `Story "${name}" did not register a React component.`
+    );
+  }
+
+  return Story;
+}
       const source =
         await response.text();
 
