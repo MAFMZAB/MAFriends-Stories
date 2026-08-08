@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -10,12 +12,28 @@
 
   <title>MAFriends Stories</title>
 
+  <!-- React -->
+  <script
+    src="https://unpkg.com/react@18/umd/react.development.js"
+  ></script>
+
+  <!-- ReactDOM -->
+  <script
+    src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+  ></script>
+
+  <!-- Babel -->
+  <script
+    src="https://unpkg.com/@babel/standalone/babel.min.js"
+  ></script>
+
   <style>
+
     body {
       margin: 0;
-      padding: 40px 20px;
+      padding: 30px;
 
-      background: #1e1f22;
+      background: #323339;
       color: #dbdee1;
 
       font-family:
@@ -24,216 +42,293 @@
         sans-serif;
     }
 
-    main {
-      width: min(800px, 100%);
-      margin: 0 auto;
-    }
-
     h1 {
-      margin-bottom: 30px;
       color: white;
+      margin-bottom: 30px;
     }
 
     .story {
-      margin-bottom: 30px;
-
-      padding: 20px;
-
       background: #2b2d31;
 
       border-radius: 8px;
+
+      padding: 20px;
+      margin-bottom: 20px;
     }
 
     .story h2 {
       margin-top: 0;
+
       color: white;
     }
 
-    .story-content {
-      color: #dbdee1;
-      line-height: 1.5;
+    .story-error {
+      color: #f23f43;
+      white-space: pre-wrap;
     }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <main>
+  <h1>MAFriends Stories</h1>
 
-    <h1>MAFriends Stories</h1>
-
-    <div id="stories">
-      Loading stories...
-    </div>
-
-  </main>
-
-  <script
-    src="https://unpkg.com/react@18/umd/react.development.js">
-  </script>
-
-  <script
-    src="https://unpkg.com/react-dom@18/umd/react-dom.development.js">
-  </script>
-
-  <script
-    src="https://unpkg.com/@babel/standalone/babel.min.js">
-  </script>
+  <div id="stories">
+    Loading stories...
+  </div>
 
 
-  <script type="text/babel">
+  <script>
 
-    const storyFiles = [
-      {
-        name: "M.A.F. 2.0",
-        id: "mafmzab",
-        file: "mafmzab.jsx"
-      },
-    
-      {
-        name: "Arsikk",
-        id: "arsikk0",
-        file: "arsikk0.jsx"
-      },
-    
-      {
-        name: "Krissy",
-        id: "_sillyness",
-        file: "_sillyness.jsx"
-      },
-    
-      {
-        name: "Kea",
-        id: "shino_ena.",
-        file: "shino_ena..jsx"
-      },
-    
-      {
-        name: "Zaffy/Reen",
-        id: "definitelyreen",
-        file: "definitelyreen.jsx"
-      }
-    ];
+    /*
+      ========================================
+      STORY FILES
+      ========================================
+    */
 
-    const loadStory = async (story) => {
+    const storyFiles = {
 
-      const url =
-        `https://cdn.jsdelivr.net/gh/MAFMZAB/MAFriends-Stories@main/${story.file}`;
+      mafmzab:
+        "mafmzab.jsx",
 
-      const response = await fetch(url);
+      arsikk0:
+        "arsikk0.jsx",
 
-      if (!response.ok) {
-        throw new Error(
-          `Failed to fetch ${story.file}`
-        );
-      }
+      _sillyness:
+        "_sillyness.jsx",
 
-      const source = await response.text();
+      "shino_ena.":
+        "shino_ena..jsx",
 
+      definitelyreen:
+        "definitelyreen.jsx"
 
-      const transformed =
-        Babel.transform(source, {
-          presets: ["react"]
-        }).code;
-
-
-      const exports = {};
-
-      const runner = new Function(
-        "React",
-        "exports",
-        transformed
-      );
-
-      runner(
-        React,
-        exports
-      );
-
-
-      return window.friendStories;
     };
 
 
-    const container =
-      document.getElementById("stories");
+    /*
+      ========================================
+      STORY DISPLAY NAMES
+      ========================================
+    */
+
+    const storyNames = {
+
+      mafmzab:
+        "M.A.F. 2.0",
+
+      arsikk0:
+        "Arsikk",
+
+      _sillyness:
+        "Krissy",
+
+      "shino_ena.":
+        "Kea",
+
+      definitelyreen:
+        "Zaffy/Reen"
+
+    };
 
 
-    const renderStories = async () => {
+    /*
+      ========================================
+      GLOBAL STORY REGISTRY
+      ========================================
+    */
+
+    window.friendStories = {};
+
+
+    /*
+      ========================================
+      LOAD STORY
+      ========================================
+    */
+
+    async function loadStory(name) {
+
+      const file =
+        storyFiles[name];
+
+      const response =
+        await fetch(
+          file + "?v=" + Date.now()
+        );
+
+      if (!response.ok) {
+
+        throw new Error(
+          `HTTP ${response.status} while loading ${file}`
+        );
+
+      }
+
+      const source =
+        await response.text();
+
+
+      /*
+        Convert JSX into normal JavaScript.
+      */
+
+      const transformed =
+        Babel.transform(
+          source,
+          {
+            presets: ["react"]
+          }
+        ).code;
+
+
+      /*
+        Run the transformed story.
+      */
+
+      const script =
+        document.createElement("script");
+
+      script.textContent =
+        transformed;
+
+      document.body.appendChild(script);
+
+
+      /*
+        Make sure the story registered itself.
+      */
+
+      const Story =
+        window.friendStories[name];
+
+      if (
+        typeof Story !== "function"
+      ) {
+
+        throw new Error(
+          `Story "${name}" did not register a React component.`
+        );
+
+      }
+
+      return Story;
+    }
+
+
+    /*
+      ========================================
+      LOAD ALL STORIES
+      ========================================
+    */
+
+    async function loadAllStories() {
+
+      const container =
+        document.getElementById("stories");
 
       container.innerHTML = "";
 
 
-      for (const story of storyFiles) {
+      for (
+        const name of Object.keys(storyFiles)
+      ) {
 
         const section =
           document.createElement("section");
 
-        section.className = "story";
+        section.className =
+          "story";
 
 
-        const title =
+        const heading =
           document.createElement("h2");
 
-        title.textContent = story.name;
+        heading.textContent =
+          storyNames[name];
 
-
-        const content =
-          document.createElement("div");
-
-        content.className = "story-content";
-
-
-        section.appendChild(title);
-        section.appendChild(content);
-
-        container.appendChild(section);
+        section.appendChild(
+          heading
+        );
 
 
         try {
 
-          window.friendStories = {};
-
-          await loadStory(story);
-
-
-          const storyComponent =
-            window.friendStories[story.id];
+          const Story =
+            await loadStory(name);
 
 
-          if (!storyComponent) {
-            throw new Error(
-              "Story did not register a React component."
-            );
-          }
+          /*
+            Create a React root
+            inside this story's section.
+          */
 
+          const rootElement =
+            document.createElement("div");
 
-          ReactDOM.createRoot(content).render(
-            React.createElement(
-              storyComponent
-            )
+          section.appendChild(
+            rootElement
           );
+
+
+          const root =
+            ReactDOM.createRoot(
+              rootElement
+            );
+
+
+          root.render(
+            React.createElement(Story)
+          );
+
 
         } catch (error) {
 
-          content.textContent =
-            `Failed to load story: ${error.message}`;
+          const errorElement =
+            document.createElement("div");
+
+          errorElement.className =
+            "story-error";
+
+          errorElement.textContent =
+            "Failed to load story: " +
+            error.message;
+
+          section.appendChild(
+            errorElement
+          );
 
           console.error(
-            story.name,
+            "Failed to load story:",
+            name,
             error
           );
 
         }
 
+
+        container.appendChild(
+          section
+        );
+
       }
 
-    };
+    }
 
 
-    renderStories();
+    /*
+      ========================================
+      START
+      ========================================
+    */
+
+    loadAllStories();
 
   </script>
 
 </body>
+
 </html>
