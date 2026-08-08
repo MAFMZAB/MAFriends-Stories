@@ -3,16 +3,7 @@ const MAFMZAB = () => {
   return (
     <>
       <p>
-        This is M.A.F.'s story.
-      </p>
-
-      <h2>
-        Some stuff
-      </h2>
-
-      <p>
-        Arsikk is probably going to complain
-        that this is obviously an AI template.
+        BEFORE MESSAGE
       </p>
 
       <Message
@@ -20,25 +11,11 @@ const MAFMZAB = () => {
           {
             id: 1,
             sender: "M.A.F.",
-            timestamp: "Right now",
             content: [
               {
                 parts: [
                   {
-                    text: "This message is being rendered by the Mimo Message component."
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            id: 2,
-            sender: "MrArsikk",
-            content: [
-              {
-                parts: [
-                  {
-                    text: "WHAT"
+                    text: "HELLO FROM MESSAGE"
                   }
                 ]
               }
@@ -46,6 +23,10 @@ const MAFMZAB = () => {
           }
         ]}
       />
+
+      <p>
+        AFTER MESSAGE
+      </p>
     </>
   );
 
