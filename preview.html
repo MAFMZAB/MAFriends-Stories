@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>MAFriends Stories</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+
+      background: #1e1f22;
+      color: #dbdee1;
+
+      font-family:
+        Inter,
+        Arial,
+        sans-serif;
+    }
+
+    main {
+      width: min(800px, 100%);
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: white;
+    }
+
+    .story {
+      margin-bottom: 30px;
+
+      padding: 20px;
+
+      background: #2b2d31;
+
+      border-radius: 8px;
+    }
+
+    .story h2 {
+      margin-top: 0;
+      color: white;
+    }
+
+    .story-content {
+      color: #dbdee1;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main>
+
+    <h1>MAFriends Stories</h1>
+
+    <div id="stories">
+      Loading stories...
+    </div>
+
+  </main>
+
+  <script
+    src="https://unpkg.com/react@18/umd/react.development.js">
+  </script>
+
+  <script
+    src="https://unpkg.com/react-dom@18/umd/react-dom.development.js">
+  </script>
+
+  <script
+    src="https://unpkg.com/@babel/standalone/babel.min.js">
+  </script>
+
+
+  <script type="text/babel">
+
+    const storyFiles = [
+      {
+        name: "M.A.F. 2.0",
+        file: "mafmzab.jsx"
+      },
+
+      {
+        name: "Arsikk",
+        file: "arsikk0.jsx"
+      },
+
+      {
+        name: "Krissy",
+        file: "_sillyness.jsx"
+      },
+
+      {
+        name: "Kea",
+        file: "shino_ena.jsx"
+      },
+
+      {
+        name: "Zaffy/Reen",
+        file: "definitelyreen.jsx"
+      }
+    ];
+
+
+    const loadStory = async (story) => {
+
+      const url =
+        `https://cdn.jsdelivr.net/gh/MAFMZAB/MAFriends-Stories@main/stories/${story.file}`;
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch ${story.file}`
+        );
+      }
+
+      const source = await response.text();
+
+
+      const transformed =
+        Babel.transform(source, {
+          presets: ["react"]
+        }).code;
+
+
+      const exports = {};
+
+      const runner = new Function(
+        "React",
+        "exports",
+        transformed
+      );
+
+      runner(
+        React,
+        exports
+      );
+
+
+      return window.friendStories;
+    };
+
+
+    const container =
+      document.getElementById("stories");
+
+
+    const renderStories = async () => {
+
+      container.innerHTML = "";
+
+
+      for (const story of storyFiles) {
+
+        const section =
+          document.createElement("section");
+
+        section.className = "story";
+
+
+        const title =
+          document.createElement("h2");
+
+        title.textContent = story.name;
+
+
+        const content =
+          document.createElement("div");
+
+        content.className = "story-content";
+
+
+        section.appendChild(title);
+        section.appendChild(content);
+
+        container.appendChild(section);
+
+
+        try {
+
+          window.friendStories = {};
+
+          await loadStory(story);
+
+
+          const storyComponent =
+            window.friendStories[
+              story.file.replace(".jsx", "")
+            ];
+
+
+          if (!storyComponent) {
+            throw new Error(
+              "Story did not register a React component."
+            );
+          }
+
+
+          ReactDOM.createRoot(content).render(
+            React.createElement(
+              storyComponent
+            )
+          );
+
+        } catch (error) {
+
+          content.textContent =
+            `Failed to load story: ${error.message}`;
+
+          console.error(
+            story.name,
+            error
+          );
+
+        }
+
+      }
+
+    };
+
+
+    renderStories();
+
+  </script>
+
+</body>
+</html>
