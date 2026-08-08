@@ -2,9 +2,11 @@ const MAFMZAB = () => {
 
   return (
     <>
-      <p>
-        BEFORE MESSAGE
-      </p>
+      <h1>Header Test</h1>
+      <p>Paragraph Test</p>
+      <ul>
+        <li>List Test</li>
+      </ul>
 
       <Message
         messages={[
@@ -15,7 +17,10 @@ const MAFMZAB = () => {
               {
                 parts: [
                   {
-                    text: "HELLO FROM MESSAGE"
+                    text: "Testing if <Message/> components can be loaded from GitHub into Mimo."
+                  },
+                  {
+                    text: "Seems like it works."
                   }
                 ]
               }
