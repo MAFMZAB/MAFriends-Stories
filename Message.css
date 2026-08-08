@@ -1,0 +1,892 @@
+/* ========================================
+   MESSAGE LIST
+======================================== */
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+
+  background-color: #323339;
+  color: white;
+
+  padding: 7px 0;
+  margin: 0;
+
+  font-family: Inter, sans-serif;
+}
+
+
+/* ========================================
+   MESSAGE ROW
+======================================== */
+
+.chat-box {
+  position: relative;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  padding: 3px 16px;
+  margin: 0;
+
+  background-color: #323339;
+
+  box-sizing: border-box;
+}
+
+.chat-box:hover {
+  background-color: #393a41;
+}
+
+.grouped {
+  margin-top: 0;
+}
+
+
+/* ========================================
+   REPLY ROW SPACING
+======================================== */
+
+/*
+   Reply previews are visually ABOVE the
+   PFP and message content.
+
+   The extra top padding moves the entire
+   actual message down together.
+*/
+
+.chat-box:has(.reply-preview) {
+  padding-top: 24px;
+}
+
+
+/* ========================================
+   PFP
+======================================== */
+
+.pfp-container {
+  position: relative;
+
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 40px;
+
+  margin-top: 2px;
+
+  box-sizing: border-box;
+}
+
+.pfp-container .pfp {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 40px;
+  height: 40px;
+
+  margin: 0;
+  padding: 0;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  display: block;
+
+  z-index: 1;
+}
+
+.pfp:hover {
+  cursor: pointer;
+}
+
+
+/* ========================================
+   PFP DECORATION
+======================================== */
+
+.pfp-decoration {
+  position: absolute;
+
+  top: -3px;
+  left: -3px;
+
+  width: 48px;
+  height: 48px;
+
+  margin: 0;
+  padding: 0;
+
+  object-fit: contain;
+
+  pointer-events: none;
+  user-select: none;
+
+  z-index: 2;
+}
+
+
+/* ========================================
+   GROUPED MESSAGE PFP SPACER
+======================================== */
+
+.pfp-spacer {
+  width: 40px;
+  min-width: 40px;
+
+  height: 1px;
+
+  flex: 0 0 40px;
+
+  margin: 0;
+  padding: 0;
+}
+
+
+/* ========================================
+   MESSAGE BODY
+======================================== */
+
+.message-body {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 0;
+  margin: 0;
+}
+
+
+/* ========================================
+   MESSAGE HEADER
+======================================== */
+
+.message-header {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  min-height: 20px;
+
+  margin: 0;
+  padding: 0;
+}
+
+.sender {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.sender:hover {
+  text-decoration: underline;
+}
+
+.role-icon {
+  width: 18px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
+.timestamp,
+.edited {
+  font-size: 0.65rem;
+  color: #949ba4;
+}
+
+
+/* ========================================
+   MESSAGE CONTENT
+======================================== */
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+}
+
+.text-content {
+  margin: 0;
+  padding: 0;
+
+  font-size: 14px;
+  line-height: 1.2;
+
+  color: #dbdee1;
+
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.automod-text {
+  color: #f23f43;
+}
+
+.jumbo-text {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+
+/* ========================================
+   MENTIONS
+======================================== */
+
+.mentioned {
+  background-color: #464662;
+  color: #CDD7FF;
+
+  padding: 1.5px 4px;
+
+  border-radius: 4px;
+
+  font-size: 1em;
+
+  margin-right: 2px;
+  margin-bottom: 2px;
+}
+
+.mentioned:hover {
+  background-color: #5865F2;
+  color: white;
+}
+
+
+/* ========================================
+   CODE
+======================================== */
+
+code {
+  background-color: #1a1a1c;
+
+  padding: 2px 4px;
+
+  border-radius: 4px;
+
+  font-family: monospace;
+}
+
+
+/* ========================================
+   CUSTOM EMOJIS
+======================================== */
+
+.custom-emoji {
+  width: 24px;
+  height: 24px;
+
+  vertical-align: middle;
+}
+
+.jumbo-emoji {
+  width: 48px;
+  height: 48px;
+}
+
+.emoji-wrapper {
+  position: relative;
+
+  display: inline-block;
+}
+
+
+/* ========================================
+   EMOJI TOOLTIP
+======================================== */
+
+.emoji-wrapper::after {
+  content: attr(data-name);
+
+  position: absolute;
+
+  bottom: 130%;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: #242428;
+  color: white;
+
+  padding: 6px 8px;
+
+  border-radius: 4px;
+
+  border: 1px solid gray;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: opacity 0.15s;
+
+  z-index: 20;
+}
+
+.emoji-wrapper:hover::after {
+  opacity: 1;
+}
+
+/* ========================================
+   INLINE MEDIA
+======================================== */
+
+.inline-image {
+  display: block;
+
+  max-width: 520px;
+  max-height: 520px;
+
+  width: auto;
+  height: auto;
+
+  margin-top: 4px;
+
+  border-radius: 8px;
+
+  object-fit: contain;
+
+  cursor: pointer;
+}
+
+
+.inline-image:hover {
+  filter: brightness(0.95);
+}
+
+
+/* ========================================
+   INLINE VIDEO
+======================================== */
+
+.inline-video {
+  display: block;
+
+  width: auto;
+  max-width: 520px;
+  max-height: 520px;
+
+  margin-top: 4px;
+
+  border-radius: 8px;
+
+  background-color: #111214;
+}
+
+/* ========================================
+   SPOILERS
+======================================== */
+
+.spoiler {
+  background-color: #111214;
+  color: transparent;
+
+  border-radius: 3px;
+
+  padding: 0 4px;
+
+  cursor: pointer;
+
+  transition: 0.15s;
+
+  user-select: none;
+}
+
+.spoiler:hover {
+  background-color: #1b1d21;
+}
+
+.spoiler.revealed {
+  color: #dbdee1;
+  background-color: #3a3d42;
+}
+
+
+/* ========================================
+   REPLY PREVIEW
+======================================== */
+
+.reply-preview {
+  position: absolute;
+
+  top: 3px;
+  left: 16px;
+
+  display: flex;
+  align-items: center;
+
+  height: 18px;
+
+  margin: 0;
+
+  color: #949ba4;
+
+  font-size: 0.75rem;
+
+  overflow: visible;
+
+  z-index: 3;
+
+  pointer-events: none;
+}
+
+
+/* ========================================
+   REPLY CONNECTOR
+======================================== */
+
+.reply-connector {
+  position: relative;
+
+  width: 52px;
+  height: 21px;
+
+  flex: 0 0 52px;
+
+  box-sizing: border-box;
+
+  pointer-events: none;
+}
+
+
+/*
+   Connector shape:
+
+        PFP
+         │
+         │
+         └────────── reply author
+
+   The vertical portion reaches the bottom
+   of the replied-to avatar, then turns right.
+*/
+
+.reply-connector::before {
+  content: "";
+
+  position: absolute;
+
+  left: 18px;
+  top: 0;
+
+  width: 30px;
+  height: 9px;
+  margin-top: 9px;
+
+  box-sizing: border-box;
+
+  border-left: 2px solid #4f545c;
+  border-top: 2px solid #4f545c;
+
+  border-top-left-radius: 8px;
+}
+
+
+/*
+   Small horizontal continuation so the
+   connector meets the reply content cleanly.
+*/
+
+.reply-connector::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50px;
+  bottom: 0;
+
+  width: 2px;
+  height: 2px;
+
+  background-color: #4f545c;
+
+  border-radius: 50%;
+}
+
+
+/* ========================================
+   REPLY CONTENT
+======================================== */
+
+.reply-preview-content {
+  display: flex;
+  align-items: center;
+
+  min-width: 0;
+
+  height: 18px;
+
+  gap: 5px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  pointer-events: auto;
+}
+
+/* ========================================
+   REPLY AUTHOR
+======================================== */
+
+.reply-author {
+  color: #b5bac1;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  transition:
+    color 0.1s ease,
+    text-decoration 0.1s ease;
+}
+
+.reply-author:hover {
+  color: #ffffff;
+
+  text-decoration: underline;
+}
+
+
+/* ========================================
+   REPLIED MESSAGE
+======================================== */
+
+.reply-message-text {
+  color: #949ba4;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  max-width: 420px;
+}
+
+
+/* ========================================
+   REACTIONS
+======================================== */
+
+.reactions {
+  display: flex;
+
+  gap: 6px;
+
+  margin-top: 4px;
+
+  flex-wrap: wrap;
+}
+
+.reaction {
+  background-color: #2f3136;
+
+  border-radius: 12px;
+
+  padding: 2px 8px;
+
+  font-size: 0.75rem;
+
+  cursor: pointer;
+}
+
+.reaction:hover {
+  background-color: #3a3d42;
+}
+
+
+/* ========================================
+   EMBEDS
+======================================== */
+
+.embed {
+  display: flex;
+
+  margin-top: 8px;
+
+  background-color: #2b2d31;
+
+  border-radius: 4px;
+
+  overflow: hidden;
+
+  max-width: 520px;
+}
+
+.embed-color {
+  width: 4px;
+
+  background-color: #5865f2;
+
+  flex-shrink: 0;
+}
+
+.embed-content {
+  padding: 8px 12px;
+
+  min-width: 0;
+}
+
+.embed-title {
+  font-weight: 600;
+
+  margin-bottom: 4px;
+}
+
+.embed-description {
+  color: #c9ccd1;
+
+  font-size: 0.9rem;
+
+  word-break: break-word;
+}
+
+
+/* ========================================
+   ATTACHMENTS
+======================================== */
+
+.attachments {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  margin-top: 6px;
+}
+
+.attachment-image {
+  display: block;
+
+  max-width: 420px;
+  max-height: 520px;
+
+  width: auto;
+  height: auto;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  transition: filter 0.15s;
+}
+
+.attachment-image:hover {
+  filter: brightness(0.9);
+}
+
+
+/* ========================================
+   PROFILE POPUP OVERLAY
+======================================== */
+
+.profile-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  z-index: 100;
+}
+
+
+/* ========================================
+   PROFILE POPUP
+======================================== */
+
+.profile-popup {
+  width: 360px;
+
+  background: #111214;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  color: white;
+}
+
+
+/* ========================================
+   PROFILE BANNER
+======================================== */
+
+.profile-banner {
+  height: 100px;
+
+  background: #5865f2;
+}
+
+
+/* ========================================
+   PROFILE AVATAR
+======================================== */
+
+.profile-avatar-container {
+  position: relative;
+
+  width: 110px;
+  height: 110px;
+
+  margin-top: -55px;
+  margin-left: 20px;
+}
+
+.profile-pfp {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 110px;
+  height: 110px;
+
+  margin: 0;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 6px solid #111214;
+
+  box-sizing: border-box;
+
+  z-index: 1;
+}
+
+.profile-pfp-decoration {
+  position: absolute;
+
+  top: -5px;
+  left: -1px;
+
+  width: 120px;
+  height: 120px;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+
+/* ========================================
+   PROFILE STATUS
+======================================== */
+
+.status {
+  position: absolute;
+
+  width: 26px;
+  height: 26px;
+
+  right: 0;
+  bottom: 3px;
+
+  border-radius: 50%;
+
+  border: 4px solid #111214;
+
+  z-index: 3;
+
+  box-sizing: border-box;
+}
+
+.status.online {
+  background: #23a559;
+}
+
+.status.idle {
+  background: #f0b232;
+}
+
+.status.dnd {
+  background: #f23f43;
+}
+
+.status.offline {
+  background: #80848e;
+}
+
+
+/* ========================================
+   PROFILE INFO
+======================================== */
+
+.profile-info {
+  padding: 12px 20px 20px;
+}
+
+.profile-display-name {
+  margin: 0;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.profile-nameplate {
+  margin-top: 2px;
+
+  color: #b5bac1;
+
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.profile-badges {
+  margin-top: 12px;
+}
+
+.profile-badges span {
+  background: #2b2d31;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  margin-right: 5px;
+}
+
+.profile-bio {
+  margin-top: 14px;
+
+  color: #dbdee1;
+
+  font-size: 13px;
+
+  line-height: 1.45;
+}
